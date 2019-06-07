@@ -11,23 +11,34 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return response()->json($posts);
+
+        return response()->json([
+            'posts' => $posts
+        ]);
     }
+
 
     public function store(Request $request)
     {
         
     }
 
+
     public function show($id)
     {
-        
+        $post = Post::find($id);
+
+        return response()->json([
+            'post' => $post
+        ]);
     }
+
 
     public function update(Request $request)
     {
         
     }
+
 
     public function destroy($id)
     {

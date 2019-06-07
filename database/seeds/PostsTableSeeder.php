@@ -15,7 +15,7 @@ class PostsTableSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             DB::table('posts')->insert([
                 'user_id' => 1,
-                'text' => "テストテキスト{$i}",
+                'post' => "テストテキスト{$i}",
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

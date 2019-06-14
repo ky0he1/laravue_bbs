@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -10,17 +11,25 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
-        
+        $posts = Post::orderBy('created_at', 'desc')->get();
+
         return response()->json([
             'posts' => $posts
         ]);
     }
 
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
+        $post = new Post;
+
+        $post->post    = $request->post;
+        $post->user_id = $request->user_id;     // test user_id
+        $post->save();
         
+        return response()->json([
+            'post' => $post
+        ]);
     }
 
 

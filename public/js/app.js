@@ -1707,6 +1707,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1815,6 +1817,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1823,21 +1839,38 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       modalTitle: 'コメント',
-      post: []
+      post: {},
+      userInput: {
+        'comment': '',
+        'post_id': '',
+        'user_id': 1 // test user
+
+      }
     };
   },
   created: function created() {
-    var _this = this;
-
-    axios.get("/api/posts/".concat(this.$route.params.id)).then(function (response) {
-      _this.post = response.data.post;
-    })["catch"](function (error) {
-      console.log(error);
-    });
+    this.getData();
   },
   methods: {
-    setUserInput: function setUserInput(payload) {
-      this.userInput = payload;
+    getData: function getData() {
+      var _this = this;
+
+      axios.get("/api/posts/".concat(this.$route.params.id)).then(function (response) {
+        _this.post = response.data.post;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    sendUserInput: function sendUserInput(payload) {
+      var _this2 = this;
+
+      this.userInput.comment = payload;
+      this.userInput.post_id = Number(this.$route.params.id);
+      axios.post('/api/comments', this.userInput).then(function (response) {
+        _this2.getData();
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -1854,6 +1887,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Modal */ "./resources/js/components/Modal.vue");
+//
 //
 //
 //
@@ -1899,10 +1933,6 @@ __webpack_require__.r(__webpack_exports__);
     this.getData();
   },
   methods: {
-    debugLog: function debugLog() {
-      console.log("========== debugLog ==========");
-      console.log(this.userInput);
-    },
     getData: function getData() {
       var _this = this;
 
@@ -1916,7 +1946,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.userInput.post = payload;
-      console.log(this.userInput);
       axios.post('/api/posts', this.userInput).then(function (response) {
         _this2.getData();
       })["catch"](function (error) {
@@ -37222,7 +37251,9 @@ var render = function() {
     [
       _c("Header"),
       _vm._v(" "),
-      _c("div", { staticClass: "container" }, [_c("RouterView")], 1)
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "container mt-4 mb-4" }, [_c("RouterView")], 1)
+      ])
     ],
     1
   )
@@ -37440,10 +37471,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container mt-4" }, [
+  return _c("div", [
     _c("h1", [_vm._v("詳細")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card mb-4" }, [
+      _c("h5", { staticClass: "card-header" }, [_vm._v("投稿")]),
+      _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "card-text" }, [
           _vm._m(0),
@@ -37467,17 +37500,51 @@ var render = function() {
               _c("Modal", {
                 staticClass: "mr-3",
                 attrs: { modalTitle: _vm.modalTitle },
-                on: { setUserInput: _vm.setUserInput }
+                on: { sendUserInput: _vm.sendUserInput }
               })
             ],
             1
           )
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("h5", { staticClass: "card-header" }, [_vm._v("コメント一覧")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "ul",
+          { staticClass: "list-group list-group-flush" },
+          _vm._l(_vm.post.comments, function(comment, index) {
+            return _c("li", { key: index, staticClass: "list-group-item" }, [
+              _vm._m(1, true),
+              _vm._v(" "),
+              _c("p", { staticClass: "ml-2" }, [
+                _vm._v(_vm._s(comment.comment))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-right" }, [
+                _vm._v(_vm._s(comment.created_at))
+              ])
+            ])
+          }),
+          0
+        )
+      ])
     ])
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("i", { staticClass: "fas fa-user mr-2" }),
+      _vm._v("サンプルユーザー")
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -37511,7 +37578,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container mt-4" },
     [
       _c("h1", [_vm._v("掲示板")]),
       _vm._v(" "),
@@ -37521,37 +37587,33 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("div", { staticClass: "card" }, [
+        _c("h5", { staticClass: "card-header" }, [_vm._v("投稿一覧")]),
+        _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c(
             "ul",
             { staticClass: "list-group list-group-flush" },
-            _vm._l(_vm.posts, function(post) {
-              return _c(
-                "li",
-                { key: post.id, staticClass: "list-group-item" },
-                [
-                  _vm._m(0, true),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "ml-2" }, [_vm._v(_vm._s(post.post))]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "text-right" }, [
-                    _vm._v(_vm._s(post.created_at))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    { staticClass: "text-right" },
-                    [
-                      _c(
-                        "router-link",
-                        { attrs: { to: "/Posts/" + post.id } },
-                        [_vm._v("詳細へ")]
-                      )
-                    ],
-                    1
-                  )
-                ]
-              )
+            _vm._l(_vm.posts, function(post, index) {
+              return _c("li", { key: index, staticClass: "list-group-item" }, [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c("p", { staticClass: "ml-2" }, [_vm._v(_vm._s(post.post))]),
+                _vm._v(" "),
+                _c("p", { staticClass: "text-right" }, [
+                  _vm._v(_vm._s(post.created_at))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  { staticClass: "text-right" },
+                  [
+                    _c("router-link", { attrs: { to: "/Posts/" + post.id } }, [
+                      _vm._v("詳細へ")
+                    ])
+                  ],
+                  1
+                )
+              ])
             }),
             0
           )

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
+use App\Models\Comment;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,6 +37,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
+        $post->comments;
 
         return response()->json([
             'post' => $post

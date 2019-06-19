@@ -1,14 +1,15 @@
 <template>
-  <div class="container mt-4">
+  <div>
 
     <h1>掲示板</h1>
     
     <Modal @sendUserInput="sendUserInput" :modalTitle="modalTitle"/>
     
     <div class="card">
+      <h5 class="card-header">投稿一覧</h5>
       <div class="card-body">
         <ul class="list-group list-group-flush">
-          <li v-for="post in posts" :key="post.id" class="list-group-item">
+          <li v-for="(post, index) in posts" :key="index" class="list-group-item">
             <p><i class="fas fa-user mr-2"></i>サンプルユーザー</p>
             <p class="ml-2">{{ post.post }}</p>
             <p class="text-right">{{ post.created_at }}</p>
@@ -37,7 +38,7 @@ export default {
       posts: [],
       userInput: {
         'post': '',
-        'user_id': 1 // test user
+        'user_id': 1      // test user
       }
     }
   },
@@ -47,11 +48,6 @@ export default {
   },
 
   methods: {
-    debugLog: function() {
-      console.log("========== debugLog ==========")
-      console.log(this.userInput)
-    },
-
     getData() {
       axios.get('/api/posts')
       .then(response => {
@@ -64,17 +60,15 @@ export default {
 
     sendUserInput (payload) {
       this.userInput.post = payload
-      console.log(this.userInput)
 
       axios.post('/api/posts', this.userInput)
-      .then(response => {
-        this.getData()
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        .then(response => {
+          this.getData()
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
-
   }
 }
 </script>

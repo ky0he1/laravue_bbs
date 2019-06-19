@@ -2,7 +2,9 @@
   <div>
     <Header />
     <div class="container">
-      <RouterView />
+      <div class="container mt-4 mb-4">
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>

@@ -14,7 +14,9 @@
             <p class="ml-2">{{ post.post }}</p>
             <p class="text-right">{{ post.created_at }}</p>
             <p class="text-right">
-              <router-link :to="`/Posts/${post.id}`">詳細へ</router-link>
+              <router-link :to="`/Posts/${post.id}`">
+                <button class="btn btn-outline-primary">詳細</button>
+              </router-link>
             </p>
           </li>
         </ul>

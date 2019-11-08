@@ -44,7 +44,7 @@ export default {
 
   data () {
     return {
-      modalTitle: 'コメント',
+      modalTitle: 'コメントする',
       post: {},
       userInput: {
         'comment': '',

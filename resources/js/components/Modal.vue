@@ -31,10 +31,10 @@
                     type="button"
                     class="btn btn-primary"
             >送信</button>
-          </div><!-- /.modal-footer -->
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
